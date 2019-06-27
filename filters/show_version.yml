@@ -1,0 +1,10 @@
+vars:
+  system:
+    platform: "{{ item.platform }}"
+    os: "{{ item.os }}"
+    version: "{{ item.version }}"
+
+keys:
+  show_version:
+    value: "{{ system }}"
+    items: "^Cisco (?P<os>.+) Software, (?P<platform>.+) Software.+?Version (?P<version>\\d\\d\\.\\d[^,.]+).+$"

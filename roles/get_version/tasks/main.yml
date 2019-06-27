@@ -1,0 +1,7 @@
+- ios_command:
+    commands: show version
+  register: output
+
+- set_fact: 
+    version: '{{output}}'
+

@@ -1,0 +1,16 @@
+- hosts: sw_pelado
+  gather_facts: no
+  tasks:
+    - include_role:
+        name: get_version
+    
+    - debug:
+        msg: "{{version.stdout[0]}}"
+
+    - name: generate structured show_version output
+      set_fact:
+        show_version: "{{ version.stdout[0] | parse_cli('filters/show_version.yml') }}"
+    
+    - name: show the output
+      debug:
+        var: show_version.show_version[0].platform
