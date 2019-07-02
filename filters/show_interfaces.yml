@@ -1,0 +1,22 @@
+vars:
+  interface:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+    protocol: "{{ item.protocol }}"
+    description: "{{ item.description }}"
+    input_rate_interval: "{{ item.input_rate_interval }}"
+    input_rate_interval_units: "{{ item.input_rate_units }}"
+    input_rate_units: "{{ item.input_rate_units }}"
+    input_rate: "{{ item.input_rate }}"
+    output_rate_interval: "{{ item.output_rate_interval }}"
+    output_rate_interval_units: "{{ item.output_rate_units }}"
+    output_rate_units: "{{ item.output_rate_units }}"
+    output_rate: "{{ item.output_rate }}"
+
+keys:
+  interfaces:
+    value: "{{ interface }}"
+    items: "(?P<name>(Vlan|FastEthernet|GigabitEthernet|Port)-?[A-Za-z]*\\d+/?\\d*) is (?P<state>[^,]+), line protocol is (?P<protocol>[^\n]+)
+    [\\w\\W]+?(Description:(?P<description>[^\n]*))?
+    [\\w\\W]+?(?P<input_rate_interval>\\d+) (?P<input_rate_interval_units>\\w+) input rate (?P<input_rate>\\d+) (?P<input_rate_units>\\w+/\\w+).+?\n
+    [\\w\\W]+?(?P<output_rate_interval>\\d+) (?P<output_rate_interval_units>\\w+) output rate (?P<output_rate>\\d+) (?P<output_rate_units>\\w+/\\w+)"
