@@ -1,4 +1,5 @@
-- hosts: sw_pelado
+- hosts: sw_cliente_demo
+# - hosts: sw_pelado
   gather_facts: no
   tasks:
     #- include_role:

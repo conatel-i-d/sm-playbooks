@@ -42,7 +42,7 @@ keys:
     items: "(?P<name>(Vlan|FastEthernet|GigabitEthernet|Port)-?[A-Za-z]*\\d+/?\\d*) is (?P<state>[^,]+), line protocol is (?P<protocol>[^\n]+)\n
     \\s*Hardware is (?P<hw_type>[^,]+), address is (?P<mac_address>[0-9a-f]{4}\\.[0-9a-f]{4}\\.[0-9a-f]{4}) \\(bia .{14}\\)\\s*\n
     (\\s*?Description:\\s*(?P<desc>.+)\n)?(\\s*?Internet address is (?P<internet_address>\\d\\d?\\d?\\.\\d\\d?\\d?\\.\\d\\d?\\d?\\.\\d\\d?\\d?/\\d\\d?)\\s*\n)?
-    [\\w\\W]*?MTU (?P<mtu>\\d+) (?P<mtu_units>\\w+), BW (?P<bandwidth>\\d+) (?P<bandwidth_units>\\w+), DLY (?P<delay>\\d+) (?P<delay_units>\\w+),\\s*\n
+    [\\w\\W]*?MTU (?P<mtu>\\d+) (?P<mtu_units>\\w+), BW (?P<bandwidth>\\d+) (?P<bandwidth_units>[^,]+), DLY (?P<delay>\\d+) (?P<delay_units>\\w+),\\s*\n
     \\s*?reliability (?P<reliability>\\d\\d?\\d?/\\d\\d?\\d?), txload (?P<tx_load>\\d\\d?\\d?/\\d\\d?\\d?), rxload (?P<rx_load>\\d\\d?\\d?/\\d\\d?\\d?)\\s*\n
     \\s*?Encapsulation[^\n]+\n
     \\s*?Keepalive[^\n]+\n
