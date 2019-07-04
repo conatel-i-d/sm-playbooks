@@ -3,20 +3,31 @@ vars:
     name: "{{ item.name }}"
     state: "{{ item.state }}"
     protocol: "{{ item.protocol }}"
-    description: "{{ item.description }}"
-    input_rate_interval: "{{ item.input_rate_interval }}"
-    input_rate_interval_units: "{{ item.input_rate_units }}"
+    description: "{{ item.desc }}"
+    input_rate_interval_units: "{{ item.input_rate_interval_units }}"
+    input_rate_interval_value: "{{ item.input_rate_interval }}"
     input_rate_units: "{{ item.input_rate_units }}"
-    input_rate: "{{ item.input_rate }}"
-    output_rate_interval: "{{ item.output_rate_interval }}"
-    output_rate_interval_units: "{{ item.output_rate_units }}"
+    input_rate_value: "{{ item.input_rate }}"
+    output_rate_interval_units: "{{ item.output_rate_interval_units }}"
+    output_rate_interval_value: "{{ item.output_rate_interval }}"
     output_rate_units: "{{ item.output_rate_units }}"
-    output_rate: "{{ item.output_rate }}"
+    output_rate_value: "{{ item.output_rate }}"
+    mtu_units: "{{ item.mtu_units }}"
+    mtu_value: "{{ item.mtu }}"
+    bandwdth_units: "{{ item.bandwidth_units }}"
+    bandwdth_value: "{{ item.bandwidth }}"
+    delay_units: "{{ item.delay_units }}"
+    delay_value: "{{ item.delay }}"
+    internet_address: "{{ item.internet_address }}"
+    hw_type: "{{ item.hw_type}}"
+    mac_address: "{{ item.mac_address}}"
 
 keys:
   interfaces:
     value: "{{ interface }}"
-    items: "(?P<name>(Vlan|FastEthernet|GigabitEthernet|Port)-?[A-Za-z]*\\d+/?\\d*) is (?P<state>[^,]+), line protocol is (?P<protocol>[^\n]+)
-    [\\w\\W]+?(Description:(?P<description>[^\n]*))?
-    [\\w\\W]+?(?P<input_rate_interval>\\d+) (?P<input_rate_interval_units>\\w+) input rate (?P<input_rate>\\d+) (?P<input_rate_units>\\w+/\\w+).+?\n
-    [\\w\\W]+?(?P<output_rate_interval>\\d+) (?P<output_rate_interval_units>\\w+) output rate (?P<output_rate>\\d+) (?P<output_rate_units>\\w+/\\w+)"
+    items: "(?P<name>(Vlan|FastEthernet|GigabitEthernet|Port)-?[A-Za-z]*\\d+/?\\d*) is (?P<state>[^,]+), line protocol is (?P<protocol>[^\n]+)\n
+    \\s*Hardware is (?P<hw_type>[^,]+), address is (?P<mac_address>[0-9a-f]{4}\\.[0-9a-f]{4}\\.[0-9a-f]{4}) \\(bia .{14}\\)\\s*\n
+    (\\s*?Description:\\s*(?P<desc>.+)\n)?(\\s*?Internet address is (?P<internet_address>\\d\\d?\\d?\\.\\d\\d?\\d?\\.\\d\\d?\\d?\\.\\d\\d?\\d?/\\d\\d?)\\s*\n)?
+    [\\w\\W]*?MTU (?P<mtu>\\d+) (?P<mtu_units>\\w+), BW (?P<bandwidth>\\d+) (?P<bandwidth_units>\\w+), DLY (?P<delay>\\d+) (?P<delay_units>\\w+),\\s*\n
+    [\\w\\W]*?(?P<input_rate_interval>\\d+) (?P<input_rate_interval_units>\\w+) input rate (?P<input_rate>\\d+) (?P<input_rate_units>\\w+/\\w+).+?\n
+    [\\w\\W]*?(?P<output_rate_interval>\\d+) (?P<output_rate_interval_units>\\w+) output rate (?P<output_rate>\\d+) (?P<output_rate_units>\\w+/\\w+).+?\n.+"
