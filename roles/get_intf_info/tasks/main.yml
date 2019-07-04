@@ -12,3 +12,14 @@
 - name: debug result
   debug:
     var: result
+
+- name: summary
+  debug:
+    msg: 'Cantidad de puertos: {{ result.interfaces | length }}'
+
+- name: Port list
+  debug:
+    msg: '{{ item.name }}'
+  loop: '{{ result.interfaces }}'
+  loop_control:
+    label: "{{ item.name }}"
