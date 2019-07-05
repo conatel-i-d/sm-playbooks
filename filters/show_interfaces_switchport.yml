@@ -1,0 +1,19 @@
+vars:
+  interface:
+    name: "{{ item.name | replace('Gi', 'GigabitEthernet') | replace('Po','Port-channel') | replace('Fa','FastEthernet')}}"
+    switchport: "{{ item.switchport }}"
+    adminisrtative_mode: "{{ item.admin_mode }}"
+    operational_mode: "{{ item.oper_mode }}"
+    administrative_trunk_encapsulation: "{{ item.admin_trunk_encap }}"
+    operational_trunk_encapsulation:  "{{ item.oper_trunk_encap }}"
+    trunk_negotiation: "{{ item.trunk_negotiation }}"
+    access_mode_vlan: "{{ item.access_mode_vlan }}"
+    native_vlan: "{{ item.native_vlan }}"
+    native_vlan_tagging: "{{ item.native_vlan_tagging }}"
+    voice_vlan: "'{{ item.voice_vlan }}'"
+    enabled_vlans: "'{{ item.enabled_vlans }}'"
+    pruning_enabled_vlans: "'{{ item.pruning_enabled_vlans }}'"
+keys:
+  interfaces:
+    value: "{{ interface }}"
+    items: "Name: (?P<name>[^\n]+)\n\\s*?Switchport:\\s*(?P<switchport>[^\n]+)\n\\s*?Administrative Mode:\\s*(?P<admin_mode>[^\n]+)\n\\s*?Operational Mode:\\s*(?P<oper_mode>[^\n]+)\n\\s*?Administrative Trunking Encapsulation:\\s*(?P<admin_trunk_encap>[^\n]+)\n(\\s*?Operational Trunking Encapsulation:\\s*(?P<oper_trunk_encap>[^\n]+)\n)?\\s*?Negotiation of Trunking:\\s*(?P<trunk_negotiation>[^\n]+)\n\\s*?Access Mode VLAN:\\s*(?P<access_mode_vlan>[^\n]+)\n\\s*?Trunking Native Mode VLAN:\\s*(?P<native_vlan>[^\n]+)\n\\s*?Administrative Native VLAN tagging:\\s*(?P<native_vlan_tagging>[^\n]+)\n\\s*?Voice VLAN:\\s*(?P<voice_vlan>[^\n]+)\n[\\w\\W]+?Trunking VLANs Enabled:\\s*(?P<enabled_vlans>[^\n]+)\n\\s*?Pruning VLANs Enabled:\\s*(?P<pruning_enabled_vlans>[^\n]+)\n"

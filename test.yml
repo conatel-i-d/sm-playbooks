@@ -1,4 +1,4 @@
-- hosts: sw_cliente_demo
+- hosts: ios
 # - hosts: sw_pelado
   gather_facts: no
   tasks:
@@ -11,5 +11,21 @@
     - include_role:
         name: get_intf_info
 
+    - debug:
+        msg: "{{ result.keys() }}"
+
+    #- name: summary
+    #  debug:
+    #    msg: 'Cantidad de puertos: {{ result.interfaces | length }}'
+
     #- include_role:
     #    name: get_vlan_info
+
+    # - set_fact:
+    #     prueba: "{{ {} }}"
+
+    # - set_fact:
+    #     test: "{{ prueba | combine({item[0]: item[1]}) }}"
+    #   with_nested:
+    #     - "{{ [{'name': '11'}, {'value': '22'}, {'interval': '33'}] }}"
+    #     - "{{ [{'name': 'aa'}, {'valor': 'bb'}, {'intervalo': 'cc'}] }}"

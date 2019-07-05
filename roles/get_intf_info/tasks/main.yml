@@ -1,25 +1,19 @@
-# Role that return information regarding the operational state of the interfaces of a switch
+- include: show_interfaces.yml
 
-- name: issue a show interfaces command and return the output
-  ios_command:
-    commands: show interfaces
-  register: output
+- set_fact:
+    show_interfaces_result: "{{ result }}"
 
-- name: generate structured show_interfaces output
-  set_fact:
-    result: "{{ (output.stdout[0] | parse_cli('filters/show_interfaces.yml')) }}"
+- include: show_interfaces_switchport.yml
 
-- name: debug result
-  debug:
-    var: result
+- set_fact:
+    show_interfaces_switchport_result: "{{ result }}"
+    
+- set_fact:
+    result: "{{ {} }}"
 
-- name: summary
-  debug:
-    msg: 'Cantidad de puertos: {{ result.interfaces | length }}'
-
-- name: Port list
-  debug:
-    msg: '{{ item.name }}'
-  loop: '{{ result.interfaces }}'
-  loop_control:
-    label: "{{ item.name }}"
+- set_fact:
+    result: "{{ result | combine({ item[0].name: item[0] | combine(item[1]) }) }}"
+  when: "{{ item[0].name == item[1].name }}"
+  with_nested: 
+    - "{{ show_interfaces_result.interfaces }}"
+    - "{{ show_interfaces_switchport_result.interfaces }}"
