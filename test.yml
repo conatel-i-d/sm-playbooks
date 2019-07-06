@@ -1,5 +1,5 @@
-- hosts: ios
-# - hosts: sw_pelado
+#- hosts: ios
+- hosts: sw_cliente_demo
   gather_facts: no
   tasks:
     #- include_role:
@@ -9,10 +9,12 @@
     #    msg: "{{version}}"
 
     - include_role:
-        name: get_intf_info
-
-    - debug:
-        msg: "{{ result.keys() }}"
+        name: reset_interface
+      vars:
+        name: 'GigabitEthernet0/2'
+        descriptions:
+          - 'LAN_CORP'
+          - 'LAN_IMP'
 
     #- name: summary
     #  debug:

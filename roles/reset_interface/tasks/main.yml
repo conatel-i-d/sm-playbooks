@@ -1,0 +1,45 @@
+# Role that issues a shutdown -> no shutdown sequence on an interface only if it has certain description and 
+# if it is an access port.
+# Mandatory variables:
+#   name: String <name of the interface>
+#   descriptions: List of strings <list with the descriptions>
+
+- name: get the information of the device
+  include_role:
+    name: get_intf_info
+
+- name: check whether the name of the interface is correct
+  set_fact:
+    interface: "{{ result[name] }}"
+
+- name: ensure that the interface is an access port or is down
+  fail:
+    msg: Unable to reset non-access interface
+  when: interface.operational_mode != 'static access' and not 'down' in interface.operational_mode
+
+- name: set initial value for the variable that flags the absense of the proper interface description
+  set_fact:
+    description_is_not_present: "{{ true }}"
+
+- name: check if the interface has any of the required descriptions
+  set_fact:
+    description_is_not_present: "{{ false }}"
+  when: item in interface.description
+  loop: "{{ descriptions }}"
+
+- name: abort when none of the descriptions is present in the interface
+  fail:
+    msg: Unable to reset the interface. None of the expected descriptions is present
+  when: description_is_not_present | bool
+
+- name: Issue the shutdown command
+  ios_config:
+    lines:
+      - shutdown
+    parents: "interface {{ name }}"
+  
+- name: Issue the no-shutdown command
+  ios_config:
+    lines:
+      - no shutdown
+    parents: "interface {{ name }}"
