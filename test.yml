@@ -1,20 +1,20 @@
 #- hosts: ios
-- hosts: sw_cliente_demo
+- hosts: pelado
   gather_facts: no
   tasks:
-    #- include_role:
-    #    name: get_version
+    - include_role:
+        name: get_version
     
     #- debug:
     #    msg: "{{version}}"
 
-    - include_role:
-        name: reset_interface
-      vars:
-        name: 'GigabitEthernet0/2'
-        descriptions:
-          - 'LAN_CORP'
-          - 'LAN_IMP'
+    #- include_role:
+    #    name: reset_interface
+    #  vars:
+    #    name: 'GigabitEthernet0/2'
+    #    descriptions:
+    #      - 'LAN_CORP'
+    #      - 'LAN_IMP'
 
     #- name: summary
     #  debug:
