@@ -1,0 +1,42 @@
+# Role that returns the output of the <show interfaces switchport> command in a structured way.
+# The structure of the output is as follows:
+# {
+#   "GigabitEthernet0/12": {
+#       "native_vlan": "1 (default)",
+#       "operational_mode": "down",
+#       "pruning_enabled_vlans": "2-1001",
+#       "switchport": "Enabled",
+#       "adminisrtative_mode": "dynamic auto",
+#       "native_vlan_tagging": "enabled",
+#       "enabled_vlans": "ALL",
+#       "operational_trunk_encapsulation": null,
+#       "voice_vlan": "none",
+#       "trunk_negotiation": "On",
+#       "administrative_trunk_encapsulation": "dot1q",
+#       "access_mode_vlan": "1 (default)",
+#       "name": "GigabitEthernet0/12"
+#   },
+#   "GigabitEthernet0/11": {
+#       "native_vlan": "1 (default)",
+#       "operatio
+#   ...
+# }
+
+- name: issue a <show interfaces switchport> command and register the output
+  ios_command:
+    commands: show interfaces switchport
+  register: output
+
+- name: generate structured show_interfaces_switchport output
+  set_fact:
+    result: "{{ (output.stdout[0] | parse_cli('filters/show_interfaces_switchport.yml')) }}"
+
+- name: transform result so it has the proper data structure
+  list_to_dict:
+    list: '{{ result.interfaces }}'
+    key: name
+  register: result
+
+- name: change result variable so that it doesn't contains msg key.
+  set_fact:
+    result: '{{ result.msg }}'

@@ -1,7 +1,0 @@
-- hosts: "{{ runtime_defined_hosts }}"
-  gather_facts: no
-  tasks:
-    - include_role:
-        name: get_version
-    - debug:
-        var: result

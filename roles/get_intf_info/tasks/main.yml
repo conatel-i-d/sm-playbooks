@@ -1,40 +1,116 @@
-- include: show_interfaces.yml
+# Role that issues the following commands:
+# - show interfaces
+# - show interfaces switchport
+# - show mac address-table
+# ...and return a data structure with the combined information of the three previous commands.
+# The structure of the command is as follows:
+# {
+#   "FastEthernet0/14": {
+#       "native_vlan": "1 (default)",
+#       "input_rate_interval_units": "minute",
+#       "protocol": "up (connected) ",
+#       "pruning_enabled_vlans": "2-1001",
+#       "input_rate_units": "bits/sec",
+#       "rx_load": "1/255",
+#       "mac_entries": [
+#           {
+#               "vlan": 1,
+#               "type": "DYNAMIC",
+#               "mac_address": "001c.b17e.3183"
+#           },
+#           {
+#               "vlan": 1,
+#               "type": "DYNAMIC",
+#               "mac_address": "8815.440a.abf7"
+#           },
+#           {
+#               "vlan": 501,
+#               "type": "DYNAMIC",
+#               "mac_address": "0007.5fab.ccf7"
+#           },
+#       ],
+#       "enabled_vlans": "ALL",
+#       "reliability": "255/255",
+#       "voice_vlan": "none",
+#       "input_errors": 0,
+#       "output_rate_value": 32000,
+#       "speed": "100Mb/s",
+#       "internet_address": null,
+#       "bandwdth_value": 100000,
+#       "mtu_value": 1500,
+#       "duplex": " Full-duplex",
+#       "ignored_errors": 0,
+#       "output_rate_interval_units": "minute",
+#       "name": "FastEthernet0/14",
+#       "interface_resets": 1,
+#       "collisions": 0,
+#       "state": "up",
+#       "delay_units": "usec",
+#       "mac_address": "88f0.7787.470e",
+#       "media_type": "10/100BaseTX",
+#       "crc_errors": 0,
+#       "access_mode_vlan": "1 (default)",
+#       "output_errors": 0,
+#       "operational_mode": "trunk",
+#       "description": "---> Conexion con SW-Meraki <---",
+#       "frame_errors": 0,
+#       "native_vlan_tagging": "enabled",
+#       "mtu_units": "bytes",
+#       "operational_trunk_encapsulation": "dot1q",
+#       "trunk_negotiation": "On",
+#       "administrative_trunk_encapsulation": "dot1q",
+#       "adminisrtative_mode": "trunk",
+#       "input_rate_interval_value": 5,
+#       "input_rate_value": 51000,
+#       "delay_value": 100,
+#       "hw_type": "Fast Ethernet",
+#       "overrun_errors": 0,
+#       "output_rate_units": "bits/sec",
+#       "bandwdth_units": "Kbit",
+#       "switchport": "Enabled",
+#       "tx_load": "1/255",
+#       "link_type": null,
+#       "output_rate_interval_value": 5
+#   },
+#   ...
+# }  
+
+- include_role: 
+    name: show_interfaces
 
 - set_fact:
     show_interfaces_result: "{{ result }}"
 
-- include: show_interfaces_switchport.yml
+- include_role: 
+    name: show_interfaces_switchport
 
 - set_fact:
     show_interfaces_switchport_result: "{{ result }}"
 
-- name: generate result
-  lists_to_dict:
-    list_1: "{{ show_interfaces_result.interfaces }}"
-    list_2: "{{ show_interfaces_switchport_result.interfaces }}"
-    key: name
+- name: combine the outputs of <show interfaces> and <show interfaces switchport>
+  merge_dictionaries_of_dictionaries:
+    dict_1: '{{ show_interfaces_result }}'
+    dict_2: '{{ show_interfaces_switchport_result }}'
   register: result
 
-- name: store output in variable
+- name: store output in a new variable
   set_fact:
     output_1: '{{ result.msg }}'
 
-- debug:
-    var: output_1
-
 - name: get mac address-table information
   include_role:
-    name: get_mac_address_table
+    name: show_mac_address_table
 
-- name: store output in variable
+- name: store output in a new variable
   set_fact:
     output_2: '{{ result.msg }}'
 
-- debug:
-    var: output_2
-
 - name: combine output_1 and output_2 in a single result
-  merge_dictionaries:
+  merge_dictionaries_of_dictionaries:
     dict_1: '{{ output_1 }}'
     dict_2: '{{ output_2 }}'
   register: result
+
+- name: change result variable so that it doesn't contains msg key.
+  set_fact:
+    result: '{{ result.msg }}'

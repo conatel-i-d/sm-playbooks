@@ -1,0 +1,63 @@
+# Role that returns the output of the <show interfaces> command in a structured way.
+# The structure of the output is as follows:
+# {
+#   "Vlan1": 
+#      {
+#         "input_rate_interval_units": "minute",
+#         "protocol": "down ",
+#         "input_rate_units": "bits/sec",
+#         "rx_load": "1/255",
+#         "mtu_units": "bytes",
+#         "reliability": "255/255",
+#         "input_errors": 0,
+#         "output_rate_value": 0,
+#         "speed": null,
+#         "output_rate_interval_units": "minute",
+#         "interface_resets": 1,
+#         "mtu_value": 1500,
+#         "duplex": null,
+#         "ignored_errors": 0,
+#         "name": "Vlan1",
+#         "bandwdth_value": 1000000,
+#         "collisions": null,
+#         "state": "administratively down",
+#         "delay_units": "usec",
+#         "mac_address": "2852.6110.b140",
+#         "media_type": null,
+#         "crc_errors": 0,
+#         "link_type": null,
+#         "description": null,
+#         "frame_errors": 0,
+#         "internet_address": null,
+#         "input_rate_interval_value": 5,
+#         "input_rate_value": 0,
+#         "delay_value": 10,
+#         "hw_type": "EtherSVI",
+#         "overrun_errors": 0,
+#         "output_rate_units": "bits/sec",
+#         "bandwdth_units": "Kbit/sec",
+#         "tx_load": "1/255",
+#         "output_errors": 0,
+#         "output_rate_interval_value": 5
+#     },
+#     ...
+# }
+
+- name: issue a show interfaces command and return the output
+  ios_command:
+    commands: show interfaces
+  register: output
+
+- name: generate structured show_interfaces output
+  set_fact:
+    result: "{{ (output.stdout[0] | parse_cli('filters/show_interfaces.yml')) }}"
+
+- name: transform result so it has the proper data structure
+  list_to_dict:
+    list: '{{ result.interfaces }}'
+    key: name
+  register: result
+
+- name: change result variable so that it doesn't contains msg key.
+  set_fact:
+    result: '{{ result.msg }}'

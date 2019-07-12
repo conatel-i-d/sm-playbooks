@@ -1,6 +1,6 @@
 # Role that returns os, platform and version of a switch in a structured way
 # Format of the output:
-# version: {
+# {
 #   'os': 'IOS',
 #   'platform': 'C2960',
 #   'version': '2.2(55)SE7'
@@ -13,4 +13,4 @@
 
 - name: generate structured show_version output
   set_fact:
-    version: "{{ (output.stdout[0] | parse_cli('filters/show_version.yml')).show_version[0] }}"
+    result: "{{ (output.stdout[0] | parse_cli('filters/show_version.yml')).show_version[0] }}"

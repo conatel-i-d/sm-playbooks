@@ -1,0 +1,50 @@
+# Role that returns the output of the <show mac address-table> command in a structured way.
+# The structure of the output is as follows:
+# {
+#   "GigabitEthernet0/2": {
+#       "mac_entries": [
+#           {
+#               "vlan": 12,
+#               "type": "DYNAMIC",
+#               "mac_address": "0090.f80c.15e0"
+#           }
+#       ]
+#   },
+#   "GigabitEthernet0/10": {
+#       "mac_entries": [
+#           {
+#               "vlan": 1,
+#               "type": "DYNAMIC",
+#               "mac_address": "001c.b17e.8a28"
+#           },
+#           {
+#               "vlan": 11,
+#               "type": "DYNAMIC",
+#               "mac_address": "000c.2960.1735"
+#           },
+#           {
+#               "vlan": 11,
+#               "type": "DYNAMIC",
+#               "mac_address": "000c.29e1.745c"
+#           },
+#       ]
+#       ...
+#   }
+# }
+
+- name: issue show mac address-table command and register the result
+  ios_command:
+    commands:
+      - show mac address-table
+  register: output
+
+- name: generate structured output
+  set_fact:
+    result: "{{ (output.stdout[0] | parse_cli('filters/show_mac_address_table.yml')) }}"
+  
+- name: transform structured output to dictionary with port names as keys
+  list_to_dict_with_list:
+    list: '{{ result.entries }}'
+    key: port
+    list_name: mac_entries
+  register: result

@@ -1,0 +1,35 @@
+# Role that returns the output of the show vlan command in a structured way
+# The structure of the output is as follows:
+# { 
+#   "vlans": [
+#       {
+#           "status": "active",
+#           "id": 1,
+#           "name": "default",
+#           "ports": [
+#               "GigabitEthernet0/6",
+#               "GigabitEthernet0/9",
+#               "GigabitEthernet0/11",
+#               "GigabitEthernet0/12"
+#           ]
+#       },
+#       {
+#           "status": "active",
+#           "id": 10,
+#           "name": "VLAN0010",
+#           "ports": [
+#               ""
+#           ]
+#       },
+#       ...
+#   ]
+# }
+
+- name: issue a show vlan command and return the output
+  ios_command:
+    commands: show vlan
+  register: output
+
+- name: generate structured show_vlan output
+  set_fact:
+    result: "{{ (output.stdout[0] | parse_cli('filters/show_vlan.yml')) }}"

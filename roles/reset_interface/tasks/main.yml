@@ -1,8 +1,8 @@
-# Role that issues a shutdown -> no shutdown sequence on an interface only if it has certain description and 
+# Role that issues a shutdown -> no shutdown sequence on an interface only if it has a certain description and 
 # if it is an access port.
 # Mandatory variables:
 #   name: String <name of the interface>
-#   descriptions: List of strings <list with the descriptions>
+#   descriptions: List of strings <list with the descriptions, only one of the descriptions needs to be present for the reset to occur>
 
 - name: get the information of the device
   include_role:
