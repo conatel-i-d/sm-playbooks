@@ -1,12 +1,20 @@
-#- hosts: ios
-- hosts: pelado
+- hosts: ios
+# - hosts: sw_pelado
   gather_facts: no
+  vars:
+    app_server_url: 'http://172.31.0.1:5000'
   tasks:
-    - include_role:
-        name: get_version
+    # - include_role:
+    #     name: get_version
     
-    #- debug:
-    #    msg: "{{version}}"
+    # - debug:
+    #     msg: "{{version}}"
+
+    - include_role:
+        name: get_intf_info
+
+    - debug:
+        msg: "{{ result }}"        
 
     #- include_role:
     #    name: reset_interface
@@ -16,9 +24,17 @@
     #      - 'LAN_CORP'
     #      - 'LAN_IMP'
 
+    # - name: post results to application server
+    #   uri:
+    #     url: '{{ app_server_url }}/callback'
+    #     method: POST
+    #     body: "{{ result }}"
+    #     status_code: 200
+    #     body_format: json
+
     #- name: summary
     #  debug:
-    #    msg: 'Cantidad de puertos: {{ result.interfaces | length }}'
+    #    msg: 'Cantidad de puertos: {{ result | length }}'
 
     #- include_role:
     #    name: get_vlan_info
@@ -31,3 +47,10 @@
     #   with_nested:
     #     - "{{ [{'name': '11'}, {'value': '22'}, {'interval': '33'}] }}"
     #     - "{{ [{'name': 'aa'}, {'valor': 'bb'}, {'intervalo': 'cc'}] }}"
+
+
+    # - include_role:
+    #     name: get_mac_address_table
+    
+    # - debug:
+    #     msg: "{{ result }}"

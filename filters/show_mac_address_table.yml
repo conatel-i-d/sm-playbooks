@@ -1,0 +1,12 @@
+vars:
+  entry:
+    vlan: "{{ item.vlan }}"
+    mac_address: "{{ item.mac_address }}"
+    type: "{{ item.type }}"
+    port: "{{ item.port | replace('Gi', 'GigabitEthernet') | replace('Po','Port-channel') | replace('Fa','FastEthernet')}}"
+
+keys:
+  entries:
+    value: "{{ entry }}"
+    items: "(?P<vlan>(All|[0-9]{1,4}))\\s+(?P<mac_address>[0-9a-f]{4}\\.[0-9a-f]{4}\\.[0-9a-f]{4})\\s+(?P<type>(STATIC|DYNAMIC))\\s+(?P<port>[^\\n]+)\\n"
+    

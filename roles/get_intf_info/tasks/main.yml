@@ -7,13 +7,34 @@
 
 - set_fact:
     show_interfaces_switchport_result: "{{ result }}"
-    
-- set_fact:
-    result: "{{ {} }}"
 
-- set_fact:
-    result: "{{ result | combine({ item[0].name: item[0] | combine(item[1]) }) }}"
-  when: "{{ item[0].name == item[1].name }}"
-  with_nested: 
-    - "{{ show_interfaces_result.interfaces }}"
-    - "{{ show_interfaces_switchport_result.interfaces }}"
+- name: generate result
+  lists_to_dict:
+    list_1: "{{ show_interfaces_result.interfaces }}"
+    list_2: "{{ show_interfaces_switchport_result.interfaces }}"
+    key: name
+  register: result
+
+- name: store output in variable
+  set_fact:
+    output_1: '{{ result.msg }}'
+
+- debug:
+    var: output_1
+
+- name: get mac address-table information
+  include_role:
+    name: get_mac_address_table
+
+- name: store output in variable
+  set_fact:
+    output_2: '{{ result.msg }}'
+
+- debug:
+    var: output_2
+
+- name: combine output_1 and output_2 in a single result
+  merge_dictionaries:
+    dict_1: '{{ output_1 }}'
+    dict_2: '{{ output_2 }}'
+  register: result
