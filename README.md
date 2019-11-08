@@ -1,3 +1,4 @@
-## Proyecto de software para mesa de ayuda de la CTMSG
+# Switch Manager - Playbooks
 
-# Repositorio de AWX, el codigo del servidor de aplicacion se encuentra en otro repositorio
+En este repositorio se incluyen los playbooks con los cuales se interactuara
+con los switches.
