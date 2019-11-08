@@ -1,8 +1,6 @@
-- hosts: ios
+- hosts: all
 # - hosts: sw_pelado
   gather_facts: no
-  vars:
-    app_server_url: 'http://172.31.0.1:5000'
   tasks:
     - include_role:
         name: show_version
@@ -17,7 +15,7 @@
         msg: "{{ result }}"   
 
     - include_role:
-        name: get_intf_info
+        name: show_interfaces_information
 
     - debug:
         msg: "{{ result }}"        
