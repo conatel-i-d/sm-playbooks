@@ -6,19 +6,31 @@
         name: show_version
     
     - debug:
-        msg: "{{ result }}"
+        var: result
 
     - include_role:
         name: show_vlan
 
     - debug:
-        msg: "{{ result }}"   
+        var: result   
+
+    - include_role:
+        name: show_interfaces
+
+    - debug:
+        var: result   
+
+    - include_role:
+        name: show_interfaces_switchport
+
+    - debug:
+        var: result   
 
     - include_role:
         name: show_interfaces_information
 
     - debug:
-        msg: "{{ result }}"        
+        var: result        
 
     # - include_role:
     #    name: reset_interface
@@ -55,4 +67,4 @@
     #     name: show_interfaces_switchport
     
     # - debug:
-    #     msg: "{{ result }}"
+    #     var: result

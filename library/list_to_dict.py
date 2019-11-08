@@ -25,4 +25,4 @@ if __name__ == '__main__':
   list = module.params['list']
   key = module.params['key']
   response = generate_dict(list, key)
-  module.exit_json(msg=response)
+  module.exit_json(**response)

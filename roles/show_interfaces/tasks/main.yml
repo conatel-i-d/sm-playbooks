@@ -57,7 +57,3 @@
     list: '{{ result.interfaces }}'
     key: name
   register: result
-
-- name: change result variable so that it doesn't contains msg key.
-  set_fact:
-    result: '{{ result.msg }}'
