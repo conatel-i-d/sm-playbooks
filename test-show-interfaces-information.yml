@@ -10,8 +10,12 @@
 
     - name: send interfaces infromation response
       uri:
-        url: "http://api/api/interfaces/{{ tower_job_id }}"
+        url: http://api/api/results
         method: POST
-        body: "{{ result }}"
+        body: { 
+          type: interfaces,
+          job_id: "{{ tower_job_id }}",
+          result: "{{ result }}" 
+          }
         status_code: 201
         body_format: json
