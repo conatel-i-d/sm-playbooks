@@ -4,5 +4,14 @@
     - include_role:
         name: show_interfaces_information
     
-    - debug:
+    - name: debug show interfaces result
+      debug:
         msg: "{{ result }}"
+
+    - name: send interfaces infromation response
+      uri:
+        url: "http://api/api/interfaces/{{ tower_job_id }}"
+        method: POST
+        body: "{{ result }}"
+        status_code: 201
+        body_format: json
