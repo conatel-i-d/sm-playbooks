@@ -3,6 +3,3 @@
   tasks:
     - include_role:
         name: show_interfaces_switchport
-    
-    - debug:
-        msg: "{{ result }}"

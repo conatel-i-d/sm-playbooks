@@ -3,19 +3,14 @@
   tasks:
     - include_role:
         name: show_interfaces_information
-    
-    - name: debug show interfaces result
-      debug:
-        msg: "{{ result }}"
 
     - name: send interfaces infromation response
       uri:
         url: http://api/api/results/
         method: POST
-        body: { 
-          type: interfaces,
-          job_id: "{{ tower_job_id }}",
+        body:
+          type: interfaces
+          job_id: "{{ tower_job_id }}"
           result: "{{ result }}" 
-          }
         status_code: 200
         body_format: json
