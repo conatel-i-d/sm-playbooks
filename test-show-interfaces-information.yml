@@ -6,7 +6,7 @@
 
     - name: send interfaces infromation response
       uri:
-        url: http://api/api/results/
+        url: http://api/api/jobs/
         method: POST
         body:
           type: interfaces
