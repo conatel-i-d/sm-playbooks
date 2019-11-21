@@ -1,0 +1,10 @@
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: send interfaces infromation response
+      uri:
+        url: http://api/api/results/
+        method: POST
+        body: '{{ result }}'
+        status_code: 200
+        body_format: json
