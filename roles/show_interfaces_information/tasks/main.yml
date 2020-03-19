@@ -93,24 +93,24 @@
     dict_2: '{{ show_interfaces_switchport_result }}'
   register: result
 
-# - name: store output in a new variable
-#   set_fact:
-#     output_1: '{{ result.msg }}'
+- name: store output in a new variable
+  set_fact:
+    output_1: '{{ result }}'
 
-# - name: get mac address-table information
-#   include_role:
-#     name: show_mac_address_table
+- name: get mac address-table information
+  include_role:
+    name: show_mac_address_table
+  
+- name: store output in a new variable
+  set_fact:
+    output_2: '{{ result }}'
 
-# - name: store output in a new variable
-#   set_fact:
-#     output_2: '{{ result.msg }}'
+- name: combine output_1 and output_2 in a single result
+  merge_dictionaries_of_dictionaries:
+    dict_1: '{{ output_1 }}'
+    dict_2: '{{ output_2 }}'
+  register: result
 
-# - name: combine output_1 and output_2 in a single result
-#   merge_dictionaries_of_dictionaries:
-#     dict_1: '{{ output_1 }}'
-#     dict_2: '{{ output_2 }}'
-#   register: result
-
-# - name: change result variable so that it doesn't contains msg key.
-#   set_fact:
-#     result: '{{ result.msg }}'
+- name: change result variable so that it doesn't contains msg key.
+  set_fact:
+    result: '{{ result }}'
