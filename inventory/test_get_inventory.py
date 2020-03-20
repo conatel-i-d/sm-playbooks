@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 
-import requests
+from ansible.module_utils import urls
 import json
-
-url = 'http://api/switches'
-resp = requests.get(url, verify=False)
-data = json.loads(resp.text)
-print(data.item)
+result = urls.open_url("https://api/api/switch/inventory")
+inventory = json.load(result.read())["item"]
+print(json.dumps(inventory))
