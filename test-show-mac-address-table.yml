@@ -6,3 +6,14 @@
     
     - debug:
         msg: "{{ result }}"
+
+    - name: send mac address table infromation response
+      uri:
+        url: http://api/api/jobs/
+        method: POST
+        body:
+          type: mac_address_table
+          job_id: "{{ tower_job_id }}"
+          result: "{{ result }}" 
+        status_code: 200
+        body_format: json
