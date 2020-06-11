@@ -81,6 +81,9 @@
 - set_fact:
     show_interfaces_result: "{{ result }}"
 
+- debug:
+    msg: "{{ show_interfaces_result }}"
+
 - include_role: 
     name: show_interfaces_switchport
 
